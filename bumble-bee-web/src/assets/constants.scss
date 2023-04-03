@@ -1,0 +1,17 @@
+$white: #ffffff;
+$black: #000000;
+
+$gray100: #f6f6f6;
+$gray300: #a7a7a9;
+$gray400: #C6C6C6;
+$gray600: #717074;
+$gray800: #5c5c5c;
+
+$primaryFontSize: 14px;
+
+@mixin transition($val) {
+  transition: $val;
+  -moz-transition: $val;
+  -o-transition: $val;
+  -webkit-transition: $val;
+}
