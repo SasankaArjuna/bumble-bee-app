@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,8 +10,47 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {APP_ROUTES} from "../../constants";
 import {Link} from "react-router-dom";
+import formValidator from "../../utils/formValidator";
+import {useDispatch} from "react-redux";
+import {authActions} from "../../redux/actions";
+import {SignInRequestDto} from "../../models";
 
+const INITIAL_SIGN_IN_FORM_DATA = {
+    email: {value: '', validator: 'email', isRequired: true, disabled: false, error: null},
+    password: {value: '', validator: 'text', isRequired: true, disabled: false, error: null}
+}
 const SignIn = () => {
+    const dispatch = useDispatch()
+    const [signInFormData, setSignInFormData] = useState(INITIAL_SIGN_IN_FORM_DATA)
+
+    const onFormChange = (property: string, value: any) => {
+        switch (property) {
+            default:
+                setSignInFormData({
+                    ...signInFormData,
+                    [property]: {
+                        ...signInFormData[property as keyof typeof signInFormData],
+                        value: value,
+                        error: null
+                    }
+                })
+        }
+    }
+
+    const onSignIn = async (data: any) => {
+        const [validatedData, isValid] = await formValidator(data)
+        setSignInFormData(validatedData)
+
+        if(isValid) {
+            const payload: SignInRequestDto = {
+                email: validatedData.email.value,
+                password: validatedData.password.value
+            }
+            // @ts-ignore
+            dispatch(authActions.signIn(payload))
+        }
+    }
+
     return(
         <React.Fragment>
             <Grid container component="main" sx={{ height: '100vh' }}>
@@ -49,10 +88,13 @@ const SignIn = () => {
                         <Box component="form" noValidate onSubmit={() => {}} sx={{ mt: 1 }}>
                             <TextField
                                 margin="normal"
-                                required
                                 fullWidth
                                 id="email"
                                 label="Email Address"
+                                value={signInFormData.email.value}
+                                onChange={(event) => onFormChange('email', event.target.value)}
+                                error={!!signInFormData.email.error}
+                                required={signInFormData.email.isRequired}
                                 name="email"
                                 autoComplete="email"
                                 size="small"
@@ -60,7 +102,6 @@ const SignIn = () => {
                             />
                             <TextField
                                 margin="normal"
-                                required
                                 fullWidth
                                 name="password"
                                 label="Password"
@@ -68,12 +109,16 @@ const SignIn = () => {
                                 id="password"
                                 size="small"
                                 autoComplete="current-password"
+                                value={signInFormData.password.value}
+                                onChange={(event) => onFormChange('password', event.target.value)}
+                                error={!!signInFormData.password.error}
+                                required={signInFormData.password.isRequired}
                             />
                             <Button
-                                type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
+                                onClick={() => onSignIn(signInFormData)}
                             >
                                 Sign In
                             </Button>

@@ -1,6 +1,6 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
-import {SignIn, UserDashboard, AdminDashboard, SignUp} from '../pages'
+import {SignIn, Dashboard, SignUp} from '../pages'
 import {APP_ROUTES} from "../constants";
 const AppRoutes = () => {
     return(
@@ -10,12 +10,8 @@ const AppRoutes = () => {
                 element={<SignIn />}
             />
             <Route
-                path={APP_ROUTES.ADMIN_DASHBOARD}
-                element={<AdminDashboard />}
-            />
-            <Route
-                path={APP_ROUTES.USER_DASHBOARD}
-                element={<UserDashboard />}
+                path={APP_ROUTES.DASHBOARD}
+                element={<Dashboard />}
             />
             <Route
                 path={APP_ROUTES.SIGN_UP}

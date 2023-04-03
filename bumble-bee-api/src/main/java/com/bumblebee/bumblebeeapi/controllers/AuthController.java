@@ -25,6 +25,7 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         User user = UserManager.mapUserObjToUser(userObject);
+        user.setPassword(null);
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 }

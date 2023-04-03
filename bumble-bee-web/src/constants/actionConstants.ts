@@ -1,0 +1,10 @@
+export const AUTH_ACTIONS = {
+    AUTHENTICATE_USER: "AUTHENTICATE_USER"
+}
+
+export const COMMON_ACTIONS = {
+    REQUEST: '_REQUEST',
+    SUCCESS: '_SUCCESS',
+    ERROR: '_ERROR',
+    CLEAR: '_CLEAR'
+}

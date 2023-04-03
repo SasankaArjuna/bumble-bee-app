@@ -8,19 +8,23 @@ import {ThemeProvider} from "@mui/material";
 import {AppTheme} from "./assets";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterMoment} from "@mui/x-date-pickers/AdapterMoment";
+import {Provider} from "react-redux";
+import store from "./redux/store";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-      <BrowserRouter>
-          <ThemeProvider theme={AppTheme}>
-              <LocalizationProvider dateAdapter={AdapterMoment}>
-                  <App />
-              </LocalizationProvider>
-          </ThemeProvider>
-      </BrowserRouter>
+      <Provider store={store}>
+          <BrowserRouter>
+              <ThemeProvider theme={AppTheme}>
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                      <App />
+                  </LocalizationProvider>
+              </ThemeProvider>
+          </BrowserRouter>
+      </Provider>
   </React.StrictMode>
 );
 
