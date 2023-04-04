@@ -6,3 +6,4 @@ console.log('X', APP_CONFIGS.API_BASE)
 export const IAxiosInstance = axios.create();
 
 export * from "./authService"
+export * from "./creditInfoService"

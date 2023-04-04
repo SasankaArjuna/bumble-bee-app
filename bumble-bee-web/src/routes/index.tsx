@@ -2,6 +2,7 @@ import React from "react";
 import {Route, Routes} from "react-router-dom";
 import {SignIn, Dashboard, SignUp} from '../pages'
 import {APP_ROUTES} from "../constants";
+import PrivateRoute from "./PrivateRoute";
 const AppRoutes = () => {
     return(
         <Routes>
@@ -11,7 +12,7 @@ const AppRoutes = () => {
             />
             <Route
                 path={APP_ROUTES.DASHBOARD}
-                element={<Dashboard />}
+                element={<PrivateRoute><Dashboard /></PrivateRoute>}
             />
             <Route
                 path={APP_ROUTES.SIGN_UP}

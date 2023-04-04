@@ -6,5 +6,7 @@ export enum USER_ROLE_IDS {
 }
 
 export const APP_CONFIGS = {
-    API_BASE: process.env.REACT_APP_API_BASE
+    API_BASE: process.env.REACT_APP_API_BASE,
+    ENC_KEY: "3W8D6E9A9A83X",
+    AUTH_DATA_KEY: '_bbUserInfo'
 }

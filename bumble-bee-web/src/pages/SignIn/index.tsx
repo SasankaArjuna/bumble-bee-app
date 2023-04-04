@@ -9,9 +9,9 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {APP_ROUTES} from "../../constants";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import formValidator from "../../utils/formValidator";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {authActions} from "../../redux/actions";
 import {SignInRequestDto} from "../../models";
 
@@ -21,7 +21,15 @@ const INITIAL_SIGN_IN_FORM_DATA = {
 }
 const SignIn = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [signInFormData, setSignInFormData] = useState(INITIAL_SIGN_IN_FORM_DATA)
+    const authenticateUser = useSelector((state: any) => state.auth.authenticateUser )
+
+    React.useEffect(() => {
+        if(authenticateUser.isAuthenticated) {
+            navigate(APP_ROUTES.DASHBOARD)
+        }
+    }, [authenticateUser.isAuthenticated])
 
     const onFormChange = (property: string, value: any) => {
         switch (property) {

@@ -125,7 +125,7 @@ const SignUp = () => {
                                 <Grid item xs />
                                 <Grid item>
                                     <Link to={APP_ROUTES.ROOT}>
-                                        {"Don't have an account? Sign Up"}
+                                        {"Do have an account? Sign In"}
                                     </Link>
                                 </Grid>
                             </Grid>

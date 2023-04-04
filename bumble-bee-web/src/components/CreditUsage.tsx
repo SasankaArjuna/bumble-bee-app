@@ -1,43 +1,64 @@
 import React, {useState} from "react";
 import {Divider, Typography} from "@mui/material";
 import Chart from 'react-apexcharts'
+import {useSelector} from "react-redux";
 
+const options = {
+    chart: {
+        stacked: true,
+    },
+    plotOptions: {
+        bar: {
+            horizontal: true,
+        },
+    },
+    stroke: {
+        width: 1,
+        colors: ['#fff']
+    },
+    xaxis: {
+        categories: ["Credits"],
+    },
+    yaxis: {
+        title: {
+            text: undefined
+        },
+    },
+    fill: {
+        opacity: 1
+    },
+    colors:['#f12615', '#28cc69']
+}
+
+const INITIAL_CHART_DATA = [{
+    name: 'Used Credits',
+    data: [0]
+},
+    {
+        name: 'Available Credits',
+        data: [0]
+    }]
 const CreditUsage = () => {
-    const options = {
-        chart: {
-            stacked: true,
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-            },
-        },
-        stroke: {
-            width: 1,
-            colors: ['#fff']
-        },
-        xaxis: {
-            categories: ["Credits"],
-        },
-        yaxis: {
-            title: {
-                text: undefined
-            },
-        },
-        fill: {
-            opacity: 1
-        },
-        colors:['#f12615', '#28cc69']
-    }
+    const [series, setSeries] = useState(INITIAL_CHART_DATA)
+    const userCreditInfo = useSelector((state: any) => state.credits.userCreditInfo )
 
-    const series = [{
-        name: 'Used Credits',
-        data: [9000]
-        },
-        {
-            name: 'Available Credits',
-            data: [6000]
-        }]
+    React.useEffect(() => {
+        if(userCreditInfo.data?.creditLimit && userCreditInfo.data?.usedCredits) {
+            const used = userCreditInfo.data.usedCredits
+            const total = userCreditInfo.data.creditLimit
+            const available = total - used
+            const newChartData = [{
+                name: 'Used Credits',
+                data: [used]
+                },
+                {
+                    name: 'Available Credits',
+                    data: [available]
+                }]
+            setSeries(newChartData)
+        }
+
+    }, [userCreditInfo])
 
     return (
         <React.Fragment>

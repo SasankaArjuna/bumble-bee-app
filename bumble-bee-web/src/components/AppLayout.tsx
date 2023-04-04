@@ -12,12 +12,19 @@ import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-
+import LogoutIcon from '@mui/icons-material/Logout';
+import {useDispatch} from "react-redux";
+import {authActions} from "../redux/actions";
 const AppLayout: React.FC<{
     open: boolean;
     children: any;
     toggleDrawer(): void;
 }> = (props) => {
+    const dispatch = useDispatch()
+    const signOut = () => {
+        // @ts-ignore
+        dispatch(authActions.signOut());
+    }
     return(
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -52,6 +59,9 @@ const AppLayout: React.FC<{
                         <Badge badgeContent={4} color="secondary">
                             <NotificationsIcon />
                         </Badge>
+                    </IconButton>
+                    <IconButton color="inherit" onClick={signOut}>
+                        <LogoutIcon />
                     </IconButton>
                 </Toolbar>
             </AppBar>

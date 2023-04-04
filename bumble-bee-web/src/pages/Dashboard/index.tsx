@@ -3,9 +3,11 @@ import {AppLayout, CreditLimit, ProductList, CategoryList, BrandList, CreditUsag
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import {Typography} from "@mui/material";
+import {useSelector} from "react-redux";
 
 const Dashboard = () => {
     const [open, setOpen] = React.useState(false);
+    const authenticateUser = useSelector((state: any) => state.auth.authenticateUser )
     const toggleDrawer = () => {
         setOpen(!open);
     };
@@ -15,7 +17,7 @@ const Dashboard = () => {
             <AppLayout open={open} toggleDrawer={toggleDrawer}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <Typography variant="h5">Hi Sasanka !</Typography>
+                        <Typography variant="h5">Hi {authenticateUser.data.firstName} !</Typography>
                         <Typography variant="subtitle1">Welcome to Bumble Bee, the online loan offering platform</Typography>
                     </Grid>
                     {/* Chart */}
