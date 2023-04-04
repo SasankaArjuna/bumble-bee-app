@@ -36,6 +36,18 @@ public class User implements Serializable {
     @JoinColumn(name="user_role_id")
     private UserRole userRole;
 
+    @OneToOne(optional = true)
+    @JoinColumn(name="user_id", nullable = true)
+    private UserCreditInfo userCreditInfo;
+
+    public UserCreditInfo getUserCreditInfo() {
+        return userCreditInfo;
+    }
+
+    public void setUserCreditInfo(UserCreditInfo userCreditInfo) {
+        this.userCreditInfo = userCreditInfo;
+    }
+
     public Integer getUserId() {
         return userId;
     }

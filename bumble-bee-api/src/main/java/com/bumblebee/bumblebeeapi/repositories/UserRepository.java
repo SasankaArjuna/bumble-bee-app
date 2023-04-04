@@ -1,6 +1,7 @@
 package com.bumblebee.bumblebeeapi.repositories;
 
 import com.bumblebee.bumblebeeapi.entities.User;
+import com.bumblebee.bumblebeeapi.enums.UserRoleIds;
 import com.bumblebee.bumblebeeapi.interfaces.IUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -16,9 +17,9 @@ public class UserRepository implements IUserRepository {
     private EntityManager entityManager;
 
     @Override
-    public boolean createUser(User user) {
+    public Integer createUser(User user) {
         entityManager.persist(user);
-        return true;
+        return user.getUserId();
     }
 
     @Override
@@ -26,6 +27,14 @@ public class UserRepository implements IUserRepository {
         String query = "SELECT u, ur FROM User u JOIN u.userRole ur WHERE u.email = :email";
         return entityManager.createQuery(query, Object[].class)
                 .setParameter("email", email)
+                .getResultList();
+    }
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Object[]> getUsers(Integer userRoleId) {
+        String query = "SELECT u, ur FROM User u JOIN u.userRole ur WHERE ur.id= :userRoleId";
+        return (List<Object[]>) entityManager.createQuery(query, Object[].class)
+                .setParameter("userRoleId", userRoleId)
                 .getResultList();
     }
 }

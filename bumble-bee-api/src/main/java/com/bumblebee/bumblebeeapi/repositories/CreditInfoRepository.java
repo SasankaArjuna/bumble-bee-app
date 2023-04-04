@@ -33,4 +33,10 @@ public class CreditInfoRepository implements IUserCreditInfoRepository {
 
         return getUserCreditInfo(data.getUserId());
     }
+
+    @Override
+    public UserCreditInfo createUserCreditInfo(UserCreditInfo data) {
+        entityManager.persist(data);
+        return data;
+    }
 }

@@ -7,3 +7,4 @@ export const IAxiosInstance = axios.create();
 
 export * from "./authService"
 export * from "./creditInfoService"
+export * from "./userService"

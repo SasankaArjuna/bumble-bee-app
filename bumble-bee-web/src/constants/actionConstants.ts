@@ -4,6 +4,11 @@ export const AUTH_ACTIONS = {
     SIGN_OUT: "SIGN_OUT"
 }
 
+export const USER_ACTIONS = {
+    SIGN_UP_USER: "SIGN_UP_USER",
+    GET_USER_LIST: "GET_USER_LIST"
+}
+
 export const CREDIT_INFO_ACTIONS = {
     GET_USER_CREDIT_INFO: "GET_USER_CREDIT_INFO"
 }

@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface IUserRepository {
 
-    boolean createUser(User user);
+    Integer createUser(User user);
     List<Object[]> getUserByEmail(String email);
+
+    List<Object[]> getUsers(Integer userRoleId);
 }

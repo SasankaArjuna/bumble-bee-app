@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IUserService {
 
-    boolean createUser(User user);
+    Integer createUser(User user);
     List<Object[]> getUserByEmail(String email);
+    List<Object[]> getUsers(Integer userRoleId);
 }

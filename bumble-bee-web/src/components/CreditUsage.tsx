@@ -38,27 +38,29 @@ const INITIAL_CHART_DATA = [{
         name: 'Available Credits',
         data: [0]
     }]
-const CreditUsage = () => {
-    const [series, setSeries] = useState(INITIAL_CHART_DATA)
-    const userCreditInfo = useSelector((state: any) => state.credits.userCreditInfo )
+const CreditUsage: React.FC<{
+    chartData: any
+}> = ({chartData}) => {
+    // const [series, setSeries] = useState(INITIAL_CHART_DATA)
+    // const userCreditInfo = useSelector((state: any) => state.credits.userCreditInfo )
 
-    React.useEffect(() => {
-        if(userCreditInfo.data?.creditLimit && userCreditInfo.data?.usedCredits) {
-            const used = userCreditInfo.data.usedCredits
-            const total = userCreditInfo.data.creditLimit
-            const available = total - used
-            const newChartData = [{
-                name: 'Used Credits',
-                data: [used]
-                },
-                {
-                    name: 'Available Credits',
-                    data: [available]
-                }]
-            setSeries(newChartData)
-        }
-
-    }, [userCreditInfo])
+    // React.useEffect(() => {
+    //     if(userCreditInfo.data?.creditLimit !==null && userCreditInfo.data?.usedCredits !== null) {
+    //         const used = userCreditInfo.data?.usedCredits || 0
+    //         const total = userCreditInfo.data?.creditLimit || 0
+    //         const available = total - used
+    //         const newChartData = [{
+    //             name: 'Used Credits',
+    //             data: [used]
+    //             },
+    //             {
+    //                 name: 'Available Credits',
+    //                 data: [available]
+    //             }]
+    //         setSeries(newChartData)
+    //     }
+    //
+    // }, [userCreditInfo])
 
     return (
         <React.Fragment>
@@ -71,7 +73,7 @@ const CreditUsage = () => {
             </Typography>
             <Divider/>
 
-            <Chart options={options} series={series} type="bar" height={130}/>
+            <Chart options={options} series={chartData} type="bar" height={130}/>
         </React.Fragment>
     )
 }

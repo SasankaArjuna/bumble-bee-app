@@ -14,12 +14,17 @@ public class UserService implements IUserService {
     private IUserRepository repository;
 
     @Override
-    public boolean createUser(User user) {
+    public Integer createUser(User user) {
         return repository.createUser(user);
     }
 
     @Override
     public List<Object[]> getUserByEmail (String email) {
         return repository.getUserByEmail(email);
+    }
+
+    @Override
+    public List<Object[]> getUsers (Integer userRoleId) {
+        return repository.getUsers(userRoleId);
     }
 }

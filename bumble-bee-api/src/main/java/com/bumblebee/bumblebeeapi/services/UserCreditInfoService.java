@@ -21,4 +21,9 @@ public class UserCreditInfoService implements IUserCreditInfoService {
     public UserCreditInfo setUserCreditInfo(UserCreditInfo data) {
         return repository.setUserCreditInfo(data);
     }
+
+    @Override
+    public UserCreditInfo createUserCreditInfo(UserCreditInfo data) {
+        return repository.createUserCreditInfo(data);
+    }
 }
