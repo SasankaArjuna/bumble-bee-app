@@ -13,6 +13,8 @@ import {
     TablePagination, IconButton, Chip
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 const CategoryList: React.FC<{
     categoryList: Array<any>
@@ -87,7 +89,13 @@ const CategoryList: React.FC<{
                                     {row.status ? <Chip label="Enable" color="success" size="small" /> : <Chip label="Disable" color="error" size="small" />}
                                 </TableCell>
                                 <TableCell>
+                                    <IconButton aria-label="edit" size="small">
+                                        <ModeEditOutlineOutlinedIcon fontSize="small" />
+                                    </IconButton>
 
+                                    <IconButton aria-label="edit" color="error"  size="small">
+                                        <DeleteOutlinedIcon fontSize="small" />
+                                    </IconButton>
                                 </TableCell>
                             </TableRow>
                         ))}
