@@ -10,12 +10,13 @@ import {
     TableRow,
     TableCell,
     TableHead,
-    TablePagination, IconButton
+    TablePagination, IconButton, Chip
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const CategoryList: React.FC<{
     categoryList: Array<any>
+    onRefresh: () => void
 }> = (props) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -46,6 +47,7 @@ const CategoryList: React.FC<{
                     <IconButton
                         color="default"
                         size="small"
+                        onClick={props.onRefresh}
                         style={{marginRight: 7}}
                     >
                         <RefreshIcon />
@@ -78,11 +80,14 @@ const CategoryList: React.FC<{
                                 <TableCell component="th" scope="row">
                                     {row.name}
                                 </TableCell>
-                                <TableCell align="right">
+                                <TableCell>
                                     {row.note}
                                 </TableCell>
-                                <TableCell align="right">
-                                    {row.status}
+                                <TableCell>
+                                    {row.status ? <Chip label="Enable" color="success" size="small" /> : <Chip label="Disable" color="error" size="small" />}
+                                </TableCell>
+                                <TableCell>
+
                                 </TableCell>
                             </TableRow>
                         ))}

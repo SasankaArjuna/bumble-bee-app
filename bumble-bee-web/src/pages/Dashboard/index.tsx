@@ -6,13 +6,13 @@ import {Chip, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {SignInResponseDto} from "../../models";
 import {USER_ROLE_IDS} from "../../constants";
-import {creditInfoActions, userActions} from "../../redux/actions";
+import {categoryActions, creditInfoActions, userActions} from "../../redux/actions";
 import {useState} from "react";
 import Avatar from "@mui/material/Avatar";
 import {amber} from "@mui/material/colors";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
-const INITIAL_CHART_DATA = [{
+const INITIAL_CREDIT_INFO_CHART_DATA = [{
     name: 'Used Credits',
     data: [0]
 },
@@ -25,16 +25,18 @@ const Dashboard = () => {
     const dispatch = useDispatch()
 
     const [open, setOpen] = React.useState(false);
-    const [creditUsageChartData, setCreditUsageChartData] = useState(INITIAL_CHART_DATA)
+    const [creditUsageChartData, setCreditUsageChartData] = useState(INITIAL_CREDIT_INFO_CHART_DATA)
 
     const authenticateUser = useSelector((state: any) => state.auth.authenticateUser )
     const userCreditInfo = useSelector((state: any) => state.credits.userCreditInfo )
     const userList = useSelector((state: any) => state.users.userList )
+    const categoryList = useSelector((state: any) => state.categories.categoryList )
 
     React.useEffect(() => {
         if(isUser(authenticateUser.data)) {
             // @ts-ignore
             dispatch(creditInfoActions.getUserCreditInfo())
+            fetchCategoryList()
         }
 
         if(isAdmin(authenticateUser.data)) {
@@ -72,6 +74,11 @@ const Dashboard = () => {
 
     const isUser = (data: SignInResponseDto) => {
         return data?.userRole?.userRoleId === USER_ROLE_IDS.USER
+    }
+
+    const fetchCategoryList = () => {
+        // @ts-ignore
+        dispatch(categoryActions.getCategories())
     }
 
     return(
@@ -151,7 +158,8 @@ const Dashboard = () => {
                                     }}
                                 >
                                     <CategoryList
-                                        categoryList={[]}
+                                        categoryList={categoryList.data}
+                                        onRefresh={fetchCategoryList}
                                     />
                                 </Paper>
                             </Grid>
