@@ -46,8 +46,15 @@ const SignUp = () => {
     const onSignUp = async (data: any) => {
         const [validatedData, isValid] = await formValidator(data)
         setFormData(validatedData)
+        if(validatedData.password.value !== validatedData.confirmPassword.value) {
+            const revalidatedData = {...validatedData}
+            revalidatedData.confirmPassword.error="Passwords not matched"
+            setFormData(revalidatedData)
+            return
+        }
 
         if(isValid) {
+
             const formData: CreateUserDto = {
                 email: validatedData.email.value,
                 password: validatedData.password.value,
@@ -112,6 +119,7 @@ const SignUp = () => {
                                         onChange={(event) => onFormChange('firstName', event.target.value)}
                                         error={!!formData.firstName.error}
                                         required={formData.firstName.isRequired}
+                                        helperText={formData.firstName.error}
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
@@ -127,6 +135,7 @@ const SignUp = () => {
                                         onChange={(event) => onFormChange('lastName', event.target.value)}
                                         error={!!formData.lastName.error}
                                         required={formData.lastName.isRequired}
+                                        helperText={formData.lastName.error}
                                     />
                                 </Grid>
                             </Grid>
@@ -142,6 +151,7 @@ const SignUp = () => {
                                 onChange={(newValue) => onFormChange('dob', newValue)}
                                 focused={!!formData.dob.error}
                                 required={formData.dob.isRequired}
+                                helperText={formData.dob.error}
                             />
 
                             <TextField
@@ -157,6 +167,7 @@ const SignUp = () => {
                                 onChange={(event) => onFormChange('email', event.target.value)}
                                 error={!!formData.email.error}
                                 required={formData.email.isRequired}
+                                helperText={formData.email.error}
                             />
                             <TextField
                                 margin="normal"
@@ -170,6 +181,7 @@ const SignUp = () => {
                                 onChange={(event) => onFormChange('password', event.target.value)}
                                 error={!!formData.password.error}
                                 required={formData.password.isRequired}
+                                helperText={formData.password.error}
                             />
                             <TextField
                                 margin="normal"
@@ -183,6 +195,7 @@ const SignUp = () => {
                                 onChange={(event) => onFormChange('confirmPassword', event.target.value)}
                                 error={!!formData.confirmPassword.error}
                                 required={formData.confirmPassword.isRequired}
+                                helperText={formData.confirmPassword.error}
                             />
                             <Button
                                 fullWidth

@@ -19,6 +19,8 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 const CategoryList: React.FC<{
     categoryList: Array<any>
     onRefresh: () => void
+    onCategoryCreate: () => void
+    onCategoryUpdate: (id: number) => void
 }> = (props) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -56,6 +58,7 @@ const CategoryList: React.FC<{
                     </IconButton>
                     <Button
                         size="small"
+                        onClick={props.onCategoryCreate}
                     >
                        Create Category
                     </Button>
@@ -89,7 +92,7 @@ const CategoryList: React.FC<{
                                     {row.status ? <Chip label="Enable" color="success" size="small" /> : <Chip label="Disable" color="error" size="small" />}
                                 </TableCell>
                                 <TableCell>
-                                    <IconButton aria-label="edit" size="small">
+                                    <IconButton aria-label="edit" size="small"  onClick={() => props.onCategoryUpdate(row.categoryId)}>
                                         <ModeEditOutlineOutlinedIcon fontSize="small" />
                                     </IconButton>
 

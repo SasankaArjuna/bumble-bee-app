@@ -10,3 +10,8 @@ export const APP_CONFIGS = {
     ENC_KEY: "3W8D6E9A9A83X",
     AUTH_DATA_KEY: '_bbUserInfo'
 }
+
+export enum CATEGORY_DIALOG_MODES {
+    CREATE,
+    EDIT
+}

@@ -1,16 +1,26 @@
 import * as React from 'react';
-import {AppLayout, CreditLimit, ProductList, CategoryList, BrandList, CreditUsage, UserList} from "../../components";
+import {useState} from 'react';
+import {
+    AppLayout,
+    BrandList,
+    CategoryDialog,
+    CategoryList,
+    CreditLimit,
+    CreditUsage,
+    ProductList,
+    UserList
+} from "../../components";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import {Chip, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {SignInResponseDto} from "../../models";
-import {USER_ROLE_IDS} from "../../constants";
+import {CategoryCreateDto, SignInResponseDto} from "../../models";
+import {CATEGORY_DIALOG_MODES, USER_ROLE_IDS} from "../../constants";
 import {categoryActions, creditInfoActions, userActions} from "../../redux/actions";
-import {useState} from "react";
 import Avatar from "@mui/material/Avatar";
 import {amber} from "@mui/material/colors";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import formValidator from "../../utils/formValidator";
 
 const INITIAL_CREDIT_INFO_CHART_DATA = [{
     name: 'Used Credits',
@@ -21,10 +31,19 @@ const INITIAL_CREDIT_INFO_CHART_DATA = [{
         data: [0]
     }]
 
+const INITIAL_CATEGORY_FORM_DATA = {
+    categoryId: {value: 0, validator: 'number', isRequired: false, disabled: false, error: null},
+    categoryName: {value: '', validator: 'text', isRequired: true, disabled: false, error: null},
+    categoryNote: {value: '', validator: 'text', isRequired: true, disabled: false, error: null},
+    categoryStatus: {value: true, validator: 'boolean', isRequired: true, disabled: false, error: null},
+}
 const Dashboard = () => {
     const dispatch = useDispatch()
 
     const [open, setOpen] = React.useState(false);
+    const [categoryDialogOpen, setCategoryDialogOpen] = React.useState(false);
+    const [categoryDialogMod, setCategoryDialogMod] = React.useState(null);
+    const [categoryFormData, setCategoryFormData] = React.useState(INITIAL_CATEGORY_FORM_DATA);
     const [creditUsageChartData, setCreditUsageChartData] = useState(INITIAL_CREDIT_INFO_CHART_DATA)
 
     const authenticateUser = useSelector((state: any) => state.auth.authenticateUser )
@@ -81,9 +100,80 @@ const Dashboard = () => {
         dispatch(categoryActions.getCategories())
     }
 
+    const onToggleCategoryDialog = (status: boolean, mode: CATEGORY_DIALOG_MODES | null, id=0) => {
+        setCategoryDialogOpen(status)
+        // @ts-ignore
+        setCategoryDialogMod(mode)
+        setCategoryFormData(INITIAL_CATEGORY_FORM_DATA)
+        if(mode===CATEGORY_DIALOG_MODES.EDIT) {
+            // @ts-ignore
+            dispatch(categoryActions.getCategory(id, data => {
+                setCategoryFormData({
+                    ...categoryFormData,
+                    categoryId: {...categoryFormData.categoryId, value: data.categoryId},
+                    categoryName: {...categoryFormData.categoryName, value: data.name},
+                    categoryNote: {...categoryFormData.categoryNote, value: data.note as string},
+                    categoryStatus: {...categoryFormData.categoryStatus, value: data.status},
+                })
+            }))
+        }
+    }
+
+    const onSaveCategory = async (data: any, mod: CATEGORY_DIALOG_MODES | null) => {
+        const [validatedData, isValid] = await formValidator(data)
+        setCategoryFormData(validatedData)
+
+        if(isValid){
+            const payload: CategoryCreateDto = {
+                name: validatedData.categoryName.value,
+                note: validatedData.categoryNote.value,
+                status: validatedData.categoryStatus.value,
+                userId: authenticateUser.data.userId
+            }
+
+            if(mod===CATEGORY_DIALOG_MODES.CREATE) {
+                // @ts-ignore
+                dispatch(categoryActions.createCategory(payload, () => {
+                    onToggleCategoryDialog(false, null)
+                    fetchCategoryList()
+                }))
+            }
+            if(mod===CATEGORY_DIALOG_MODES.EDIT){
+                // @ts-ignore
+                dispatch(categoryActions.updateCategory(validatedData.categoryId.value, payload, () => {
+                    onToggleCategoryDialog(false, null)
+                    fetchCategoryList()
+                }))
+            }
+
+        }
+    }
+
+    const onCategoryFormChange = (property: string, value: any) => {
+        switch (property) {
+            default:
+                setCategoryFormData({
+                    ...categoryFormData,
+                    [property]: {
+                        ...categoryFormData[property as keyof typeof categoryFormData],
+                        value: value,
+                        error: null
+                    }
+                })
+        }
+    }
+
     return(
         <React.Fragment>
             <AppLayout open={open} toggleDrawer={toggleDrawer}>
+                <CategoryDialog
+                    open={categoryDialogOpen}
+                    onClose={() => onToggleCategoryDialog(false, null)}
+                    formData={categoryFormData}
+                    onFormChange={onCategoryFormChange}
+                    onSave={onSaveCategory}
+                    mod={categoryDialogMod}
+                />
                 <Grid container spacing={3}>
                     <Grid item container xs={12}>
                        <Grid item xs={10}>
@@ -159,7 +249,9 @@ const Dashboard = () => {
                                 >
                                     <CategoryList
                                         categoryList={categoryList.data}
+                                        onCategoryCreate={() => onToggleCategoryDialog(true, CATEGORY_DIALOG_MODES.CREATE)}
                                         onRefresh={fetchCategoryList}
+                                        onCategoryUpdate={(id) => onToggleCategoryDialog(true, CATEGORY_DIALOG_MODES.EDIT, id)}
                                     />
                                 </Paper>
                             </Grid>
